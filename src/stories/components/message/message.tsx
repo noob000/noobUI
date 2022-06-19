@@ -21,7 +21,7 @@ const addMessage = (content: string, duration: number, icon: HTMLDivElement): nu
     set[id] = 1
     return id;
 }
-const createSvg = (type: "success" | "warn" | "error"): HTMLDivElement => {
+const createSvg = (type: "success" | "warn" | "error" | "info"): HTMLDivElement => {
     const { svg, path } = icon[type];
     const iconContainer = document.createElement("div");
     iconContainer.setAttribute("class", "noob-message-iconContainer")
@@ -46,7 +46,7 @@ const createSvg = (type: "success" | "warn" | "error"): HTMLDivElement => {
  * @param {string} catagory  message type 
 */
 
-const createMessage = (content: string, duration: number, catagory: "success" | "warn" | "error"): void => {
+const createMessage = (content: string, duration: number, catagory: "success" | "warn" | "error" | "info"): void => {
     let id: number;
     if (document.querySelector(".noob-message-container")) id = addMessage(content, duration, createSvg(catagory))
     else {
@@ -64,5 +64,6 @@ const Message = {
     success: (content: string, duration: number = 3) => { createMessage(content, duration, "success") },
     warn: (content: string, duration: number = 3) => { createMessage(content, duration, "warn") },
     error: (content: string, duration: number = 3) => { createMessage(content, duration, "error") },
+    info: (content: string, duration: number = 3) => { createMessage(content, duration, "info") }
 }
 export default Message
