@@ -1,4 +1,4 @@
-import "./style.scss";
+import "./style/style.scss";
 import icon from "./icon"
 import { pathObjKey, svgObjKey } from "../icon";
 let set: any = new Proxy({}, {
@@ -39,6 +39,7 @@ const createSvg = (type: "success" | "warn" | "error" | "info"): HTMLDivElement 
     iconContainer.appendChild(svgEle);
     return iconContainer
 }
+type createMessageFn = (content: string, duration: number, catagory: "success" | "warn" | "error" | "info") => void
 /** 
  * 
  * @param {string} content  content show in the message
@@ -46,7 +47,7 @@ const createSvg = (type: "success" | "warn" | "error" | "info"): HTMLDivElement 
  * @param {string} catagory  message type 
 */
 
-const createMessage = (content: string, duration: number, catagory: "success" | "warn" | "error" | "info"): void => {
+const createMessage: createMessageFn = (content: string, duration: number, catagory: "success" | "warn" | "error" | "info"): void => {
     let id: number;
     if (document.querySelector(".noob-message-container")) id = addMessage(content, duration, createSvg(catagory))
     else {
@@ -60,10 +61,17 @@ const createMessage = (content: string, duration: number, catagory: "success" | 
         Reflect.deleteProperty(set, id)
     }, (duration + 1) * 1000)
 }
-const Message = {
+type MessageApi = {
+    success: (content: string, duration?: number) => void,
+    warn: (content: string, duration?: number) => void,
+    info: (content: string, duration?: number) => void,
+    error: (content: string, duration?: number) => void,
+}
+const Message: MessageApi = {
     success: (content: string, duration: number = 3) => { createMessage(content, duration, "success") },
     warn: (content: string, duration: number = 3) => { createMessage(content, duration, "warn") },
     error: (content: string, duration: number = 3) => { createMessage(content, duration, "error") },
     info: (content: string, duration: number = 3) => { createMessage(content, duration, "info") }
 }
 export default Message
+export type { MessageApi }
