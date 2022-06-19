@@ -2,42 +2,64 @@ import typescript from "rollup-plugin-typescript2";
 import css from "rollup-plugin-css-porter";
 import dts from 'rollup-plugin-dts';
 import babel from "@rollup/plugin-babel";
-
+import scss from "rollup-plugin-scss";
 
 const babelOptions = {
     presets: ["@babel/preset-env"],
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
-    exclude: "**/node_modules/**"
+    extensions: ['.js', '.jsx', '.ts', '.tsx',],
+    exclude: "**/node_modules/**",
 }
 const commonPlugins = [
     typescript(),
     css(),
-    babel(babelOptions)
+    babel(babelOptions),
+    scss({ output: "lib/index.css" }),
 ]
-export default [
+const button = [
     {
-        input: "src/stories/components/index.ts",
+        input: "src/stories/components/button/Button.tsx",
         output: {
-            file: "lib/es/index.js",
+            file: "lib/es/button/button.js",
             format: "esm"
         },
         plugins: commonPlugins
     },
     {
-        input: "src/stories/components/index.ts",
+        input: "src/stories/components/button/Button.tsx",
         output: {
-            file: "lib/cjs/index.js",
-            format: "cjs"
+            file: "lib/es/button/index.d.ts",
         },
+        external: [/\.scss$/],
+        plugins: [dts()]
+    },
+]
+const message = [
+    {
+        input: "src/stories/components/message/message.tsx",
+        output: [{
+            file: "lib/es/message/message.js",
+            format: "esm"
+        }],
         plugins: commonPlugins
     },
     {
-        input: "src/stories/components/index.d.ts",
+        input: "src/stories/components/message/message.tsx",
+        output: [{
+            file: "lib/es/message/index.d.ts",
+        }],
+        external: [/\.scss$/],
+        plugins: [dts()]
+    },
+]
+export default [
+    ...button,
+    ...message,
+    {
+        input: "src/stories/components/index.ts",
         output: {
             file: "lib/types/index.d.ts",
-            format: 'es'
         },
-        plugins: [...commonPlugins, dts()]
-    }
-
+        external: [/\.scss$/],
+        plugins: [dts()]
+    },
 ]
