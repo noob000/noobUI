@@ -87,6 +87,7 @@
     "rollup-plugin-css-porter": "^1.0.2",
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-embed-css": "^1.0.24",
+    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-typescript2": "^0.32.1",
     "tslib": "^2.4.0",
     "webpack": "^5.72.1"
