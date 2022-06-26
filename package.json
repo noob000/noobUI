@@ -1,7 +1,7 @@
 {
   "name": "@noob000/noobui",
   "author": "noob000",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "keywords": [
     "react",
@@ -111,5 +111,5 @@
       "config": "./.cz.config.js"
     }
   },
-  "types": "lib/types"
+  "typings": "lib/types"
 }
