@@ -1,7 +1,7 @@
 {
   "name": "@noob000/noobui",
   "author": "noob000",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": false,
   "keywords": [
     "react",
@@ -57,7 +57,7 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
-    "@noob000/noobui": "^0.2.3",
+    "@noob000/noobui": "^0.2.4",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
