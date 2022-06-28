@@ -19,7 +19,7 @@ const button = [
     {
         input: "src/stories/components/button/Button.tsx",
         output: {
-            file: "lib/es/button/button.js",
+            file: "lib/es/button/index.js",
             format: "esm"
         },
         plugins: commonPlugins
@@ -37,7 +37,7 @@ const message = [
     {
         input: "src/stories/components/message/message.tsx",
         output: [{
-            file: "lib/es/message/message.js",
+            file: "lib/es/message/index.js",
             format: "esm"
         }],
         plugins: commonPlugins

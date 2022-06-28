@@ -2024,24 +2024,12 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@noob000/noobui@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/@noob000/noobui/-/noobui-0.1.3.tgz#0f46259c61331a53952b0ecc44bdc3b6f3d33df2"
-  integrity sha512-jTvxf5qPgEV5ti6fjslIxxbMHsQsh7+nVGSF6JOg/F2i09qBqVOoG/2kP3BK29//b0MvJa2Y5aFMgi/t6HdoEQ==
+"@noob000/noobui@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.npmjs.org/@noob000/noobui/-/noobui-0.2.6.tgz#5aa95f7e461e1fc12f7893a800bca38159dd71d1"
+  integrity sha512-Yvhqi6hr6P9xlUQy6aes9eH+LLnZ2XQjsVB3oQCh8E1hE5SRMHp2rFlmUn0p2i51SxjQgtSA92RUsgVLde3HGw==
   dependencies:
-    "@testing-library/jest-dom" "^5.14.1"
-    "@testing-library/react" "^13.0.0"
-    "@testing-library/user-event" "^13.2.1"
-    "@types/jest" "^27.0.1"
-    "@types/node" "^16.7.13"
-    "@types/react" "^18.0.0"
-    "@types/react-dom" "^18.0.0"
-    react "^18.1.0"
-    react-dom "^18.1.0"
-    react-scripts "5.0.1"
-    rollup "^2.75.6"
-    typescript "^4.4.2"
-    web-vitals "^2.1.0"
+    classnames "^2.3.1"
 
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
@@ -14706,11 +14694,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.npmmirror.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
-
-typescript@^4.4.2:
-  version "4.6.4"
-  resolved "https://registry.npmmirror.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
-  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
 
 typescript@^4.7.3:
   version "4.7.3"
