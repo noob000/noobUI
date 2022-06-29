@@ -1,0 +1,12 @@
+.noob-carousel-container {
+    display: flex;
+    height: 200px;
+    width:600px;
+    transition: 1s;
+    & > * {
+        width: 600px;
+        height: 200px;
+        line-height: 200px;
+        flex-shrink: 0;
+    }
+}
