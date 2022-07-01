@@ -1,38 +1,33 @@
 import classNames from "classnames";
 import "./style/switch.scss";
-import React, { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useState } from "react";
 type SwitchProps = {
-    num: number;
+    lastIndex: number
+    size: number;
     current: number
     callback: (num: number) => void
 }
-const Switch: FC<SwitchProps> = ({ num, callback, current }) => {
-    const [last, setLast] = useState<number | undefined>()
-    const [inital, setInital] = useState<boolean>(false)
+const Switch: FC<SwitchProps> = ({ size, callback, current, lastIndex }) => {
+    const inital = lastIndex !== -1
+    
     const handleClick = (i: number) => {
-        if (!inital) setInital(true)
-        if (i !== current) {
-            setLast(current)
-            callback(i)
-        }
-
+        if (i !== current) callback(i)
     }
 
     const createElement = () => {
         let elementArray: ReactElement[] = [];
-        for (let i = 0; i < num; i++)
+        for (let i = 0; i < size; i++)
             elementArray.push(
                 <div className={classNames({
                     "noob-carousel-switch": "true",
                     "noob-carousel-switch-inital": !inital && i === 0,
                     "noob-carousel-switch-cur": i === current && inital,
-                    "noob-carousel-switch-last": i === last
+                    "noob-carousel-switch-last": i === lastIndex
                 })} key={i} onClick={handleClick.bind({}, i)}></div>)
         return elementArray
     }
-
     return (
-        <div className="noob-carousel-switch-container" style={{ width: `${(num + 1) * 40}px` }}>
+        <div className="noob-carousel-switch-container" style={{ width: `${(size + 1) * 40}px` }}>
             {createElement()}
         </div>
     )
