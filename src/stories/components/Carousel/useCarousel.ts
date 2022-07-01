@@ -27,6 +27,7 @@ const useCarousel = (
         }
         return () => { clearTimeout(timer.current) }
     }, [index])
-    return [index, last, setIndex] as [number,number, React.Dispatch<number>]
+
+    return [index, last, setIndex] as [number, number, React.Dispatch<number>]
 }
 export default useCarousel

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import "./style/switch.scss";
-import React, { FC, ReactElement, useEffect, useState } from "react";
+import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
+import { click } from "@testing-library/user-event/dist/click";
 type SwitchProps = {
     lastIndex: number
     size: number;
@@ -8,9 +9,10 @@ type SwitchProps = {
     callback: (num: number) => void
 }
 const Switch: FC<SwitchProps> = ({ size, callback, current, lastIndex }) => {
-    const inital = lastIndex !== -1
-    
+    const clicked = useRef<boolean>(false)
+    const inital = clicked.current || lastIndex !== -1
     const handleClick = (i: number) => {
+        if (!clicked.current) clicked.current = true
         if (i !== current) callback(i)
     }
 

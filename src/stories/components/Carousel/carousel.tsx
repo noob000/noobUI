@@ -9,16 +9,19 @@ type CarouselProps = {
 }
 const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
     const [transition, setTransition] = useState<boolean>(false)
-    const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, true)
+    const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay)
     const [childrenList, setChildrenList] = useState<ReactElement[]>([])
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        setChildrenList([...children.map((x, index) => <div key={index}>{x}</div>), <div key={children.length}>{children[0]}</div>])
+        if (autoplay) {
+            setChildrenList([...children.map((x, index) => <div key={index}>{x}</div>), <div key={children.length}>{children[0]}</div>])
+        }
+        else setChildrenList(children.map((x, index) => <div key={index}>{x}</div>))
     }, []);
 
     useEffect(() => {
-        if (currentIndex === 0) {
+        if (autoplay && currentIndex === 0) {
             setTimeout(() => {
                 setTransition(true)
             }, 1000)
@@ -47,7 +50,6 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
         }
         else return `translateX(0px)`
     }
-
     return (
         <div style={{ width: "600px", overflowX: "hidden" }}>
             <div className="noob-carousel-container"
