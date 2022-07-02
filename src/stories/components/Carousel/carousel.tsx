@@ -1,5 +1,4 @@
-import classNames from "classnames";
-import React, { FC, useState, useEffect, ReactElement, useRef } from "react";
+import React, { FC, useState, useEffect, ReactElement, useRef, CSSProperties } from "react";
 import "./style/carousel.scss"
 import Switch from "./switch";
 import useCarousel from "./useCarousel";
@@ -19,18 +18,7 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
         }
         else setChildrenList(children.map((x, index) => <div key={index}>{x}</div>))
     }, []);
-
-    useEffect(() => {
-        if (autoplay && currentIndex === 0) {
-            setTimeout(() => {
-                setTransition(true)
-            }, 1000)
-            setTimeout(() => {
-                setTransition(false)
-            }, 2000)
-        }
-    }, [currentIndex])
-    const getLeft = () => {
+    const translateX = () => {
         if (containerRef.current) {
             if (currentIndex === 0 && !transition && (lastIndex === children.length - 1)) {
                 const container = containerRef.current
@@ -50,11 +38,24 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
         }
         else return `translateX(0px)`
     }
+    const containerStyle: CSSProperties = {
+        transform: `${transition ? "translateX(0px)" : translateX()}`,
+        transition: `${transition ? "none" : "transform 1s"}`
+    }
+    const handleTransitionEnd = () => {
+        if (autoplay && currentIndex === 0) {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false)
+            }, 1000)
+        }
+    }
     return (
-        <div style={{ width: "600px", overflowX: "hidden" }}>
+        <div className="noob-carousel">
             <div className="noob-carousel-container"
+                onTransitionEnd={handleTransitionEnd}
                 ref={containerRef}
-                style={{ position: "relative", transform: `${transition ? "translateX(0px)" : getLeft()}`, transition: `${transition ? "none" : "1s"}` }}>
+                style={containerStyle}>
                 {childrenList}
             </div>
             <Switch

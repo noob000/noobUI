@@ -1,30 +1,9 @@
+.noob-carousel {
+    width: 600px;
+    height: 200px;
+    overflow: hidden
+}
+
 .noob-carousel-container {
     display: flex;
-    height: 200px;
-    width: 600px;
-    transition: transform 1s;
-
-    &>* {
-        width: 600px;
-        height: 200px;
-        line-height: 200px;
-        flex-shrink: 0;
-    }
-}
-
-.noob-carousel-container-1 {
-    display: flex;
-    height: 200px;
-    width: 600px;
-    transform: translateX(-600px);
-
-    &>* {
-        width: 600px;
-        height: 200px;
-        line-height: 200px;
-        flex-shrink: 0;
-    }
-}
-@keyframes slide {
-    
 }
