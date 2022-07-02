@@ -45,11 +45,11 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
     const handleTransitionEnd = () => {
         if (autoplay && currentIndex === 0) {
             setTransition(true);
-            setTimeout(() => {
-                setTransition(false)
-            }, 1000)
         }
     }
+    useEffect(() => {
+        if (currentIndex === 1 && transition) setTransition(false)
+    }, [currentIndex])
     return (
         <div className="noob-carousel">
             <div className="noob-carousel-container"
