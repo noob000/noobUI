@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 const useCarousel = (
     num: number,
     autoplay: boolean,
-    interval: number = 2000
+    interval: number
 ): [number, number, React.Dispatch<number>] => {
     const [index, setIndex] = useState<number>(0);
     const [last, setLast] = useState<number>(-1)

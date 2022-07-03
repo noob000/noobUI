@@ -1,4 +1,4 @@
-import { lstat } from "fs";
+
 import React, { FC, useState, useEffect, ReactElement, useRef, CSSProperties } from "react";
 import "./style/carousel.scss"
 import Switch from "./switch";
@@ -6,16 +6,18 @@ import useCarousel from "./useCarousel";
 type CarouselProps = {
     children: ReactElement[];
     autoplay?: boolean;
+    interval?: number
 }
-const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
+
+const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 2000 }) => {
     const [transition, setTransition] = useState<boolean>(false)
-    const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay)
+    const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay, interval)
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (currentIndex !== 0 && transition) setTransition(false)
     }, [currentIndex])
-
+   
     const translateX = () => {
         if (containerRef.current) {
             if (currentIndex === 0 && !transition && (lastIndex === children.length - 1)) {
