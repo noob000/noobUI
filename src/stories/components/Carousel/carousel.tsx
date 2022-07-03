@@ -1,3 +1,4 @@
+import { lstat } from "fs";
 import React, { FC, useState, useEffect, ReactElement, useRef, CSSProperties } from "react";
 import "./style/carousel.scss"
 import Switch from "./switch";
@@ -9,15 +10,12 @@ type CarouselProps = {
 const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
     const [transition, setTransition] = useState<boolean>(false)
     const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay)
-    const [childrenList, setChildrenList] = useState<ReactElement[]>([])
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (autoplay) {
-            setChildrenList([...children.map((x, index) => <div key={index}>{x}</div>), <div key={children.length}>{children[0]}</div>])
-        }
-        else setChildrenList(children.map((x, index) => <div key={index}>{x}</div>))
-    }, []);
+        if (currentIndex !== 0 && transition) setTransition(false)
+    }, [currentIndex])
+
     const translateX = () => {
         if (containerRef.current) {
             if (currentIndex === 0 && !transition && (lastIndex === children.length - 1)) {
@@ -38,25 +36,35 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false }) => {
         }
         else return `translateX(0px)`
     }
+
+    const handleTransitionEnd = () => {
+        if (autoplay && currentIndex === 0) setTransition(true)
+    }
+
+    const createList = () => {
+        if (autoplay) {
+            let list: JSX.Element[] = [];
+            for (let i = 0, l = children.length; i <= l; i++) {
+                if (i !== l) list.push(<div key={i}>{children[i]}</div>)
+                else list.push(<div key={i}>{children[0]}</div>)
+            }
+            return list
+        }
+        else return children.map((x, index) => <div key={index}>{x}</div>)
+    }
+
     const containerStyle: CSSProperties = {
         transform: `${transition ? "translateX(0px)" : translateX()}`,
         transition: `${transition ? "none" : "transform 1s"}`
     }
-    const handleTransitionEnd = () => {
-        if (autoplay && currentIndex === 0) {
-            setTransition(true);
-        }
-    }
-    useEffect(() => {
-        if (currentIndex === 1 && transition) setTransition(false)
-    }, [currentIndex])
+
     return (
         <div className="noob-carousel">
             <div className="noob-carousel-container"
                 onTransitionEnd={handleTransitionEnd}
                 ref={containerRef}
                 style={containerStyle}>
-                {childrenList}
+                {createList()}
             </div>
             <Switch
                 size={children.length}
