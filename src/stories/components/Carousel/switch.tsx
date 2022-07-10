@@ -21,35 +21,33 @@ const Switch: FC<SwitchProps> = ({ size, callback, current, lastIndex, dotPositi
 
     const createElement = () => {
         let elementArray: ReactElement[] = [];
-        for (let i = 0; i < size; i++)
-            if (isVertical) {
-                elementArray.push(
-                    <div className={classNames({
-                        "noob-carousel-switch-v": true,
-                        "noob-carousel-switch-inital-v": !inital && i === 0,
-                        "noob-carousel-switch-cur-v": i === current && inital,
-                        "noob-carousel-switch-last-v": i === lastIndex,
-                    })} key={i} onClick={handleClick.bind({}, i)}></div>)
+        for (let i = 0; i < size; i++) {
+            const classObj = isVertical ? {
+                "noob-carousel-switch-v": true,
+                "noob-carousel-switch-inital-v": !inital && i === 0,
+                "noob-carousel-switch-cur-v": i === current && inital,
+                "noob-carousel-switch-last-v": i === lastIndex,
+            } : {
+                "noob-carousel-switch-h": true,
+                "noob-carousel-switch-inital-h": !inital && i === 0,
+                "noob-carousel-switch-cur-h": i === current && inital,
+                "noob-carousel-switch-last-h": i === lastIndex,
             }
-            else {
-                elementArray.push(
-                    <div className={classNames({
-                        "noob-carousel-switch-h": true,
-                        "noob-carousel-switch-inital-h": !inital && i === 0,
-                        "noob-carousel-switch-cur-h": i === current && inital,
-                        "noob-carousel-switch-last-h": i === lastIndex,
-                    })} key={i} onClick={handleClick.bind({}, i)}></div>)
-            }
+            elementArray.push(
+                <div
+                    style={{ fontSize: "16px" }}
+                    className={classNames(classObj)}
+                    key={i}
+                    onClick={handleClick.bind({}, i)} />)
+        }
         return elementArray
     }
     const basicStyle: CSSProperties = isVertical ?
         {
-            height: `${(size + 1) * 40}px`,
-            fontSize: "16px"
+            height: `${(size + 1) * 40}px`
         } :
         {
             width: `${(size + 1) * 40}px`,
-            fontSize: "16px"
         }
     const classStr = `noob-carousel-switch-${dotPosition} noob-carousel-switch-container${isVertical ? "-v" : "-h"}`
     return (

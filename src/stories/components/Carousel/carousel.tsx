@@ -9,8 +9,13 @@ type CarouselProps = {
     interval?: number;
     dotPosition?: "bottom" | "top" | "left" | "right"
 }
-
 const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 2000, dotPosition = "bottom" }) => {
+    if (!["bottom", "top", "left", "right"].some((element) => element === dotPosition)) {
+        throw Error("dotPosition should be one of the bottom,top,left,top")
+    }
+    if (typeof interval !== "number" || (typeof interval === "number" && interval <= 0)) {
+        throw TypeError("interval shoud be a positive number")
+    }
     const [transition, setTransition] = useState<boolean>(false)
     const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay, interval)
     const containerRef = useRef<HTMLDivElement | null>(null);
