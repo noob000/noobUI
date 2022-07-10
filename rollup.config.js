@@ -51,9 +51,29 @@ const message = [
         plugins: [dts()]
     },
 ]
+
+const carousel = [
+    {
+        input: "src/stories/components/Carousel/carousel.tsx",
+        output: [{
+            file: "lib/es/carousel/index.js",
+            format: "esm"
+        }],
+        plugins: commonPlugins
+    },
+    {
+        input: "src/stories/components/Carousel/carousel.tsx",
+        output: [{
+            file: "lib/es/carousel/index.d.ts",
+        }],
+        external: [/\.scss$/],
+        plugins: [dts()]
+    },
+]
 export default [
     ...button,
     ...message,
+    ...carousel,
     {
         input: "src/stories/components/index.ts",
         output: {
