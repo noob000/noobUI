@@ -9,7 +9,7 @@ type SwitchProps = {
     callback: (num: number) => void
     containerRef: React.MutableRefObject<HTMLDivElement | null>
 }
-const Switch: FC<SwitchProps> = ({ size, callback, current, lastIndex, dotPosition }) => {
+const SwitchButton: FC<SwitchProps> = ({ size, callback, current, lastIndex, dotPosition }) => {
 
     const clicked = useRef<boolean>(false)
     const inital = clicked.current || lastIndex !== -1
@@ -59,4 +59,4 @@ const Switch: FC<SwitchProps> = ({ size, callback, current, lastIndex, dotPositi
 
     )
 }
-export default Switch
+export default SwitchButton

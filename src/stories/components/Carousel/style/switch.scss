@@ -38,7 +38,7 @@
     width: 1.5em;
     height: 3px;
     border-radius: 8px;
-    background-color: black;
+    background-color: grey;
     margin: 0 10px 0 10px;
     cursor: pointer;
 }
@@ -47,7 +47,7 @@
     height:1.5em;
     width: 3px;
     border-radius: 8px;
-    background-color: black;
+    background-color: grey;
     margin: 0 10px 0 10px;
     cursor: pointer;
     z-index: 3;
@@ -55,22 +55,22 @@
 
 .noob-carousel-switch-inital-h {
     width: 1em;
-    background-color: grey;
+    background-color: whitesmoke;
 }
 
 .noob-carousel-switch-inital-v {
     height: 1em;
-    background-color: grey;
+    background-color: whitesmoke;
 }
 
 .noob-carousel-switch-cur-h {
     animation: shrink-h 0.5s linear forwards;
-    background-color: grey;
+    background-color: whitesmoke;
 }
 
 .noob-carousel-switch-cur-v {
     animation: shrink-v 0.5s linear forwards;
-    background-color: grey;
+    background-color: whitesmoke;
 }
 
 .noob-carousel-switch-last-h {

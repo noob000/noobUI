@@ -1,15 +1,16 @@
 
 import React, { FC, useState, useEffect, ReactElement, useRef, CSSProperties } from "react";
 import "./style/carousel.scss"
-import Switch from "./switch";
+import SwitchButton from "./switchButton";
 import useCarousel from "./useCarousel";
 type CarouselProps = {
     children: ReactElement[];
     autoplay?: boolean;
     interval?: number;
-    dotPosition?: "bottom" | "top" | "left" | "right"
+    dotPosition?: "bottom" | "top" | "left" | "right";
+    style?:CSSProperties
 }
-const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 2000, dotPosition = "bottom" }) => {
+const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 2000, dotPosition = "bottom",style }) => {
     if (!["bottom", "top", "left", "right"].some((element) => element === dotPosition)) {
         throw Error("dotPosition should be one of the bottom,top,left,top")
     }
@@ -68,9 +69,9 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 20
     }
 
     return (
-        <div className="noob-carousel">
+        <div className="noob-carousel" style={style}>
             {isVertical ? <>
-                <Switch
+                <SwitchButton
                     size={children.length}
                     callback={(num) => { setIndex(num) }}
                     current={currentIndex}
@@ -91,7 +92,7 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 20
                         style={containerStyle}>
                         {createList()}
                     </div>
-                    <Switch
+                    <SwitchButton
                         size={children.length}
                         callback={(num) => { setIndex(num) }}
                         current={currentIndex}
@@ -100,8 +101,6 @@ const Carousel: FC<CarouselProps> = ({ children, autoplay = false, interval = 20
                         containerRef={containerRef} />
                 </>
             }
-
-
         </div>
     )
 }
