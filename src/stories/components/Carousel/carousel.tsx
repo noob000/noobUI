@@ -3,7 +3,7 @@ import React, { FC, useState, useEffect, ReactElement, useRef, CSSProperties } f
 import "./style/carousel.scss"
 import SwitchButton from "./switchButton";
 import useCarousel from "./useCarousel";
-type CarouselProps = {
+export type CarouselProps = {
     children: ReactElement[];
     autoplay?: boolean;
     interval?: number;
