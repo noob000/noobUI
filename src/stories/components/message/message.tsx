@@ -14,7 +14,7 @@ const addMessage = (content: string, duration: number, icon: HTMLDivElement): nu
     const text = document.createTextNode(content);
     const id = Math.floor(Math.random() * 100);
     message.setAttribute("class", `noob-message-box noob-message-${id}`);
-    message.setAttribute("style", `animation-delay:${duration}s`);
+    message.setAttribute("style", `animation-delay:${duration}s`);//动画延时时间即为持续时间
     message?.appendChild(icon)
     message.appendChild(text);
     container?.appendChild(message);
@@ -59,7 +59,7 @@ const createMessage: createMessageFn = (content: string, duration: number, catag
     }
     setTimeout(() => {
         Reflect.deleteProperty(set, id)
-    }, (duration + 1) * 1000)
+    }, (duration + 1) * 1000)//+1秒可以避免动画消失的问题，不影响持续时间
 }
 type MessageApi = {
     success: (content: string, duration?: number) => void,
