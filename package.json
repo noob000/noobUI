@@ -1,7 +1,7 @@
 {
   "name": "@noob000/noobui",
   "author": "noob000",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "private": false,
   "keywords": [
     "react",
@@ -15,7 +15,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "build-lib": "rimraf ./lib && rollup --config rollup.config.js && node src/entry.js"
+    "build-lib": "rimraf ./lib && rollup --config rollup.config.js && node src/entry.js",
+    "test-single": "react-scripts test .src/stories/components/message/message.test.tsx"
   },
   "dependencies": {
     "classnames": "^2.3.1"
@@ -57,7 +58,7 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
-    "@noob000/noobui": "^0.2.6",
+    "@noob000/noobui": "^0.2.7",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
