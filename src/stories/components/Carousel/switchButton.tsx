@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import "./style/switch.scss";
 import React, { CSSProperties, FC, ReactElement, useEffect, useRef, useState } from "react";
-import { click } from "@testing-library/user-event/dist/click";
 type SwitchProps = {
     lastIndex: number
     size: number;
