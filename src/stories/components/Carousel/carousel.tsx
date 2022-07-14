@@ -11,7 +11,9 @@ export type CarouselProps = {
     style?: CSSProperties;
 }
 export type CarouselRef = {
-    goTo: (posIndex: number) => void
+    goTo: (posIndex: number) => void;
+    next: () => void;
+    prev: () => void;
 }
 const Carousel = React.forwardRef<CarouselRef, CarouselProps>(
     ({
@@ -28,14 +30,12 @@ const Carousel = React.forwardRef<CarouselRef, CarouselProps>(
             throw TypeError("interval shoud be a positive number")
         }
         const [transition, setTransition] = useState<boolean>(false)
-        const [currentIndex, lastIndex, setIndex] = useCarousel(children.length, autoplay, interval)
+        const [currentIndex, lastIndex, setIndex, next,prev] = useCarousel(children.length, autoplay, interval)
         const containerRef = useRef<HTMLDivElement | null>(null);
         const isVertical = dotPosition === "left" || dotPosition === "right";
-        const CarouselRef = useRef<CarouselRef>()
         useEffect(() => {
             if (currentIndex !== 0 && transition) setTransition(false)
         }, [currentIndex])
-        console.log("rerender")
         const translateX = () => {
             if (containerRef.current) {
                 if (currentIndex === 0 && !transition && (lastIndex === children.length - 1)) {
@@ -79,8 +79,10 @@ const Carousel = React.forwardRef<CarouselRef, CarouselProps>(
             transition: `${transition ? "none" : "transform 1s"}`
         }
         useImperativeHandle(ref, () => ({
-            goTo: (num: number) => { setIndex(num) }
-        }))
+            goTo: (num: number) => setIndex(num),
+            prev: prev,
+            next: next
+        }), [currentIndex])
         return (
             <div className="noob-carousel" style={style} >
                 {isVertical ? <>

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import "./style/switch.scss";
 import React, { CSSProperties, FC, ReactElement, useEffect, useRef, useState } from "react";
+import { click } from "@testing-library/user-event/dist/click";
 type SwitchProps = {
     lastIndex: number
     size: number;
@@ -10,8 +11,10 @@ type SwitchProps = {
     containerRef: React.MutableRefObject<HTMLDivElement | null>
 }
 const SwitchButton: FC<SwitchProps> = ({ size, callback, current, lastIndex, dotPosition }) => {
-
     const clicked = useRef<boolean>(false)
+    useEffect(() => {
+        if (!clicked.current) clicked.current = true
+    }, [current])//避免触发next，prev，下方按钮没有切换
     const inital = clicked.current || lastIndex !== -1
     const isVertical = dotPosition === "left" || dotPosition === "right"
     const handleClick = (i: number) => {

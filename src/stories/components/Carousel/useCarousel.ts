@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const useCarousel = (
     num: number,
     autoplay: boolean,
     interval: number
-): [number, number, React.Dispatch<number>] => {
+): [number, number, React.Dispatch<number>, () => void, () => void] => {
     const [index, setIndex] = useState<number>(0);
     const [last, setLast] = useState<number>(-1)
     let timer = useRef<NodeJS.Timeout>()
@@ -26,8 +26,9 @@ const useCarousel = (
             })(index)
         }
         return () => { clearTimeout(timer.current) }
-    }, [index,autoplay])
-
-    return [index, last, setIndex] as [number, number, React.Dispatch<number>]
+    }, [index, autoplay])
+    const next = useCallback(() => { setIndex(index < num - 1 ? index + 1 : 0) }, [index])
+    const prev = useCallback(() => { setIndex(index === 0 ? num - 1 : index - 1) }, [index])
+    return [index, last, setIndex, next, prev] as [number, number, React.Dispatch<number>, () => void, () => void]
 }
 export default useCarousel
