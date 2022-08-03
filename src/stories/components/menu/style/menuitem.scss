@@ -13,9 +13,7 @@
     &:hover {
         border-bottom: 2px solid #1890ff;
 
-        .title {
-            color: #1890ff;
-        }
+
     }
 }
 
@@ -54,10 +52,6 @@
 
 .subMenuItem {
     padding: 7px 30px 7px 30px;
-
-    &:hover {
-        color: #1890ff;
-    }
 
     span {
         text-align: center;

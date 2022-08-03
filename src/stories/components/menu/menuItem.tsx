@@ -1,21 +1,44 @@
-import { CSSProperties, FC, RefObject, useCallback, useRef, useState } from "react";
+import { hover } from "@testing-library/user-event/dist/hover";
+import { createContext, CSSProperties, FC, forwardRef, MutableRefObject, RefObject, useCallback, useContext, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { MenuItemProps } from "./menu";
+import { ActiveKeyContext, MenuItemProps } from "./menu";
 import "./style/menuitem.scss";
-const Title: FC<MenuItemProps> = ({ label, children }) => {
+
+const Title: FC<{ item: MenuItemProps }> = ({ item }) => {
+    const { label, key, children } = item
     const [isHover, setIsHover] = useState<boolean>(false);
-    const [container, setContainer] = useState<any>(null)
+    const [container, setContainer] = useState<any>(null);
+    const [isSubMenuHover, setIsSubMenuHover] = useState<boolean>(false);
+    const { hoverKey, keyMap, setHoverKey } = useContext(ActiveKeyContext);
     const containerRef = useCallback((node: any) => {
         if (node) setContainer(node)
     }, [])
+    const colorObj = (key: string): CSSProperties => {
+        if (hoverKey === null) return {}
+        const arr = keyMap.get(hoverKey as string) as string[];
+        const temp = arr.includes(key)
+        return temp ? { color: "#1890ff" } : {}
+    }
 
+    const handleMouseEnter = () => {
+        setHoverKey(key);
+        setIsHover(true)
+    }
+    const handleMouseLeave = () => {
+        setTimeout(() => {
+            setHoverKey(null)
+            setIsHover(false);
+        }, 0)
+    }
     return (
         <>
             <div className="menuItemContainer"
-                onMouseEnter={() => { setIsHover(true) }}
-                onMouseLeave={() => { setIsHover(false) }}>
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>
                 <span
                     className="title"
+                    style={colorObj(key)}
+
                 >{label}</span>
                 {children && <div className="opacityContainer" ref={containerRef}>
                     <div style={{ opacity: "0", height: "5px" }}></div>
@@ -25,7 +48,8 @@ const Title: FC<MenuItemProps> = ({ label, children }) => {
                                 item={item}
                                 container={container}
                                 key={item.key}
-                                show={isHover} />)}
+                                show={isHover}
+                            />)}
                     </div>
                 </div>}
             </div>
@@ -35,39 +59,91 @@ const Title: FC<MenuItemProps> = ({ label, children }) => {
     )
 }
 
-const MenuItem: FC<{ item: MenuItemProps, container: any, show: boolean }> = ({ item, container, show }) => {
-    const { label, key, children } = item
-    const [isHover, setIsHover] = useState<boolean>(false);
-    return (
-        (isHover || show) ? <div className="subMenuItem"
-            onMouseEnter={() => { setIsHover(true) }}
-            onMouseLeave={() => { setIsHover(false) }}
-        >
-            <span
-            >{label}</span>
-            {children &&
-                <div className="subContainer">
-                    <SubMenuItem item={children} container={container} show={isHover} />
-                </div>
-            }
-        </div> : null
-    )
-}
-const SubMenuItem: FC<{ container: any, item: MenuItemProps[], show?: boolean }> = ({ container, item, show = true }) => {
-    const [isHover, setIsHover] = useState<boolean>(false)
-    return container && (show || isHover) ? createPortal(
-        <div className="subMenuContainer">
-            {item.map(({ label, key, children }) => {
-                return <div className='subMenuItem' key={key}
-                    onMouseEnter={() => { setIsHover(true) }}
-                    onMouseLeave={() => { setIsHover(false) }}>
-                    <span>{label}</span>
-                    {children && <SubMenuItem item={children} show={isHover} container={container} />}
-                </div>
-            }
+const MenuItem: FC<{ item: MenuItemProps, container: any, show: boolean }>
+    = ({ item, container, show }) => {
+        const { label, key, children } = item
+        const [isHover, setIsHover] = useState<boolean>(false);
+        const [isSubMenuHover, setIsSubMenuHover] = useState<boolean>(false);
+        const { hoverKey, selectKey, keyMap, setHoverKey } = useContext(ActiveKeyContext);
+        const colorObj = (key: string): CSSProperties => {
+            if (hoverKey === null) return {}
+            const arr = keyMap.get(hoverKey as string) as string[];
+            const temp = arr.includes(key)
+            return temp ? { color: "#1890ff" } : {}
+        }
+        const handleMouseEnter = () => {
+            setHoverKey(key);
+            setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+            setTimeout(() => {
+                setIsHover(false);
+            }, 0)
+        }
+        return (
+            (show || isHover) ?
+                <>
+                    <div className="subMenuItem"
+                        onMouseOver={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        style={colorObj(key)}
+                    >
+                        {label}</div>
+                    {
+                        children && (isHover || isSubMenuHover) && createPortal(
+                            <div className="subMenuContainer"
+                                onMouseEnter={() => { setIsSubMenuHover(true) }}
+                                onMouseLeave={() => { setIsSubMenuHover(false) }}>
+                                {children.map((item) => <SubMenuItem
+                                    item={item}
+                                    container={container}
+
+                                />)}
+                            </div>, container)
+                    }
+                </> : null
+
+        )
+    }
+const SubMenuItem: FC<{ container: any, item: MenuItemProps, }>
+    = ({ container, item }) => {
+        const { label, key, children } = item
+        const [isHover, setIsHover] = useState<boolean>(false)
+        const [isSubMenuHover, setIsSubMenuHover] = useState<boolean>(false);
+        const { hoverKey, keyMap, setHoverKey } = useContext(ActiveKeyContext);
+
+        const colorObj = (key: string): CSSProperties => {
+            if (hoverKey === null) return {}
+            const arr = keyMap.get(hoverKey as string) as string[];
+            const temp = arr.includes(key)
+            return temp ? { color: "#1890ff" } : {}
+        }
+        const handleMouseEnter = () => {
+            setHoverKey(key);
+            setIsHover(true)
+        }
+        const handleMouseLeave = () => {
+            setTimeout(() => {
+                setIsHover(false);
+            }, 0)
+        }
+        return <>
+            <div className='subMenuItem' key={key}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>
+                <span style={colorObj(key)}>{label}</span>
+            </div>
+            {children && (isSubMenuHover || isHover) && createPortal(
+                <div className="subMenuContainer"
+                    onMouseEnter={() => { setIsSubMenuHover(true) }}
+                    onMouseLeave={() => { setIsSubMenuHover(false) }}>
+                    {children.map((item) => <SubMenuItem
+                        item={item}
+                        container={container}
+                    />)}
+                </div>, container
             )}
-        </div>
-        ,
-        container) : null
-}
+        </>
+
+    }
 export default Title
