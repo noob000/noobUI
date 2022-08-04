@@ -37,15 +37,16 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
 
         >{label}</span>
         {children && <div className="opacityContainer" ref={containerRef}>
-            <div style={{ opacity: "0", height: "5px" }}></div>
-            <div className="subContainer">
-                {children.map((item) =>
-                    <SubMenuItem
-                        item={item}
-                        container={container}
-                        key={item.key}
-                        show={isHover}
-                    />)}
+            <div className="beforeElement">
+                <div className='shadowContainer'>
+                    {children.map((item) =>
+                        <SubMenuItem
+                            item={item}
+                            container={container}
+                            key={item.key}
+                            show={isHover}
+                        />)}
+                </div>
             </div>
         </div>}
     </div>
@@ -70,27 +71,36 @@ const SubMenuItem: FC<{ item: MenuItemProps, container: HTMLDivElement | null, s
         }
         const isChildrenRender = container && children && (isHover || isSubMenuHover)
         //子列表渲染判断当且仅当container容器非空，children非空，子列表hover或当前列表正处于hover
+        const className = children ? "subMenuItem hasChildren" : "subMenuItem noChildren";
+        const l = hoverKey ? (keyMap.get(key) as string[]).length : 0
         return (
             (show || isHover) ?//父菜单项hover或当前菜单项hover都显示
                 <>
-                    <div className="subMenuItem"
+                    <div className={className}
                         onMouseOver={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                         style={styleObj(key, hoverKey, keyMap)}
                     >
-                        {label}</div>
+                        <span className='label'>{label}</span></div>
                     {
                         isChildrenRender && createPortal(
                             <div className="subMenuContainer"
                                 onMouseEnter={() => { setIsSubMenuHover(true) }}
-                                onMouseLeave={() => { setIsSubMenuHover(false) }}>
-                                {children.map((item) =>
-                                    <SubMenuItem
-                                        item={item}
-                                        container={container}
-                                        key={item.key}
+                                onMouseLeave={() => { setIsSubMenuHover(false) }}
+                                style={{ top: `${l * 3}px` }}>
+                                <div className="beforeElement">
+                                    <div className="flexContainer">
+                                        <div className="shadowContainer">
+                                            {children.map((item) =>
+                                                <SubMenuItem
+                                                    item={item}
+                                                    container={container}
+                                                    key={item.key}
 
-                                    />)}
+                                                />)}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>, container)
                     }
                 </> : null
