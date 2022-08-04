@@ -60,7 +60,7 @@ const Menu: FC<MenuProps> = ({ items = testItem }) => {
                 setHoverKey: (key: string|null) => { setHoverKey(key) },
                 setSelectKey: (key: string) => { setSelectKey(key) }
             }}>
-                {items.map((item) => <MenuItem item={item} />)}
+                {items.map((item) => <MenuItem item={item} key={item.key}/>)}
             </ActiveKeyContext.Provider>
         </div>
     )
