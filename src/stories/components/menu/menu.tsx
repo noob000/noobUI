@@ -1,26 +1,26 @@
-import { string } from "prop-types";
-import { Children, createContext, FC, useContext, useEffect, useState } from "react";
-
+import { FC, useEffect, useState } from "react";
+import ActiveKeyContext from "./hooks/ActiveKeyContext";
 import { testItem } from "./menu.test";
 import MenuItem from "./menuItem";
 import "./style/menu.scss"
 type MenuProps = {
     items?: MenuItemProps[];
     mode?: "vertical" | "horizontal";
-
+};
+type clickFnProps = {
+    selectKey: string | null,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
 }
+
+type clickFn = (props: clickFnProps) => any
+
 type MenuItemProps = {
     label: string;
     key: string;
     children?: MenuItemProps[];
+    onClick?: clickFn
 }
-type ActiveKeyProps = {
-    selectKey: string,
-    hoverKey: string | null,
-    keyMap: Map<string, string[]>,
-    setSelectKey: (key: string) => void,
-    setHoverKey: (key: string|null) => void
-}
+
 function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string, string[]>) {
     const { key, children } = item
     let next = [...lastArr, key];
@@ -31,13 +31,6 @@ function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string,
         })
     }
 }
-const ActiveKeyContext = createContext<ActiveKeyProps>({
-    selectKey: "",
-    hoverKey: null,
-    keyMap: new Map(),
-    setSelectKey: () => { },
-    setHoverKey: () => { }
-})
 
 const Menu: FC<MenuProps> = ({ items = testItem }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>();
@@ -50,6 +43,7 @@ const Menu: FC<MenuProps> = ({ items = testItem }) => {
         })
         setKeyMap(map)
     }, [items])
+
     return (
 
         <div className='menuContainer'>
@@ -57,14 +51,17 @@ const Menu: FC<MenuProps> = ({ items = testItem }) => {
                 selectKey,
                 hoverKey: hoverKey,
                 keyMap: keyMap ?? new Map(),
-                setHoverKey: (key: string|null) => { setHoverKey(key) },
+                setHoverKey: (key: string | null) => { setHoverKey(key) },
                 setSelectKey: (key: string) => { setSelectKey(key) }
             }}>
-                {items.map((item) => <MenuItem item={item} key={item.key}/>)}
+                {items.map((item) => <MenuItem
+                    item={item}
+                    key={item.key} />)}
             </ActiveKeyContext.Provider>
         </div>
     )
 }
+
 export default Menu
 export type { MenuProps, MenuItemProps }
 export { ActiveKeyContext }

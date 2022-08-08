@@ -12,13 +12,13 @@
 
     &:hover {
         border-bottom: 2px solid #1890ff;
-    }
 
-    .title {
-        &:hover {
+        .title {
             color: #1890ff;
         }
     }
+
+
 }
 
 .opacityContainer {
@@ -66,11 +66,12 @@
     .flexContainer {
         display: flex;
         flex-direction: row;
-       &::before{
+
+        &::before {
             content: " ";
             display: block;
-            width:5px;
-            height:100%;
+            width: 5px;
+            height: 100%;
             opacity: 0;
         }
     }
