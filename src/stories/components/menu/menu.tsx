@@ -34,7 +34,7 @@ function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string,
 
 const Menu: FC<MenuProps> = ({ items = testItem }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>();
-    const [selectKey, setSelectKey] = useState<string>("");
+    const [selectKey, setSelectKey] = useState<string|null>(null);
     const [hoverKey, setHoverKey] = useState<string | null>(null);
     useEffect(() => {
         let map = new Map();
