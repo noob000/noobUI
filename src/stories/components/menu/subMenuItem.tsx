@@ -1,7 +1,7 @@
 import React, { FC, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { ActiveKeyContext, MenuItemProps } from "./menu";
-import { styleObj } from "./menuItem";
+import { styleObj as calStyleObj } from "./menuItem";
 type SubMenuItemProps = {
     item: MenuItemProps,
     container: HTMLDivElement | null,
@@ -14,7 +14,7 @@ const SubMenuItem: FC<SubMenuItemProps>
         const { label, key, children, onClick } = item
         const [isHover, setIsHover] = useState<boolean>(false);
         const [isSubMenuHover, setIsSubMenuHover] = useState<boolean>(false);
-        const { hoverKey, selectKey, keyMap, setHoverKey } = useContext(ActiveKeyContext);
+        const { hoverKey, selectKey, keyMap, setHoverKey, setSelectKey } = useContext(ActiveKeyContext);
 
         const handleMouseEnter = () => {
             setHoverKey(key);
@@ -25,14 +25,20 @@ const SubMenuItem: FC<SubMenuItemProps>
                 setIsHover(false);
             }, 0)
         }
-        const isChildrenRender = container && children && (isHover || isSubMenuHover)
+        const isChildrenRender = container && (children && children.length > 0) && (isHover || isSubMenuHover)
         //子列表渲染判断当且仅当container容器非空，children非空，子列表hover或当前列表正处于hover
         const className = children ? "subMenuItem hasChildren" : "subMenuItem noChildren";
         const l = hoverKey ? (keyMap.get(key) as string[]).length : 0;
-        const top = l * 3 + itemIndex * 30;
+        const top = l * 3 + itemIndex * 40;
+
         function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+            if (!children || children.length === 0) setSelectKey(key)
             onClick && onClick.bind(null, { selectKey, event })
         }
+
+        let styleObj = calStyleObj(key, hoverKey, selectKey, keyMap);
+        if (key === selectKey) styleObj.backgroundColor = "#bcd8f2";
+
         return (
             // show || isHover
             (show || isHover) ?//父菜单项hover或当前菜单项hover都显示
@@ -40,10 +46,10 @@ const SubMenuItem: FC<SubMenuItemProps>
                     <div className={className}
                         onMouseOver={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        style={styleObj(key, hoverKey, selectKey, keyMap)}
+                        style={styleObj}
                         onClick={handleClick}
                     >
-                        <span className='label'>{label}</span>
+                        <span className='label' style={{ textAlign: "left" }}>{label}</span>
                     </div>
                     {
                         isChildrenRender && createPortal(

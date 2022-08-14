@@ -1,5 +1,5 @@
 import { CSSProperties, FC, useCallback, useContext, useEffect, useRef, useState } from "react";
-import {   MenuItemProps } from "./menu";
+import { MenuItemProps } from "./menu";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem.scss";
 import SubMenuItem from "./subMenuItem";
@@ -9,14 +9,16 @@ const styleObj = (
     selectkey: string | null,
     keyMap: Map<string, string[]>
 ): CSSProperties => {
-    if (hoverKey === null) return {}
-    const arr = keyMap.get(hoverKey as string) as string[];
-    const temp = arr.includes(key);
+    let temp = false;
+    if (hoverKey !== null) {
+        const arr = keyMap.get(hoverKey as string) as string[];
+        temp = arr.includes(key);
+    }
     if (!selectkey) return temp ? { color: "#1890ff" } : {}
     else {
         const keyArr = keyMap.get(selectkey) as string[];
-        const isSelect = keyArr.includes(key);
-        return temp || isSelect ? { color: "#1890ff" } : {}
+        temp = temp || keyArr.includes(key);
+        return temp ? { color: "#1890ff" } : {}
     }
 }
 
@@ -24,7 +26,7 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
     const { label, key, children, onClick } = item
     const [isHover, setIsHover] = useState<boolean>(false);
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
-    const { hoverKey, keyMap, setHoverKey, selectKey } = useContext(ActiveKeyContext);
+    const { hoverKey, keyMap, setHoverKey, selectKey, setSelectKey } = useContext(ActiveKeyContext);
     const containerRef = useCallback((node: any) => {
         if (node) setContainer(node)
     }, [item])
@@ -42,6 +44,7 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
 
     const left = menuRef.current ? menuRef.current?.offsetLeft : 0;
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (!children || children.length === 0) setSelectKey(key)
         onClick && onClick.bind(null, { selectKey, event })
     }
     return (
@@ -53,7 +56,6 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
             <span
                 className="title"
                 style={styleObj(key, hoverKey, selectKey, keyMap)}
-
             >{label}</span>
             {children &&
                 <div

@@ -41,17 +41,15 @@
 .subMenuItem {
     padding: 7px 0px 7px 30px;
     position: relative;
-
-    span {
-        text-align: center;
-    }
-
+    margin: 2px 0 2px 0;
+    height: 30px;
+    line-height: 30px;
 }
 
 .hasChildren::after {
     content: ">";
     padding: 0 15px 0 50px;
-
+    float: right;
 }
 
 .noChildren::after {
@@ -79,4 +77,5 @@
 
 .shadowContainer {
     box-shadow: 0 1.5px 10px rgb(163, 162, 162);
+    padding: 2px 0;
 }
