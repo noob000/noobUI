@@ -3,7 +3,9 @@ import { MenuItemProps } from "./menu";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem-horizontal.scss";
 import "./style/menuitem-vertical.scss";
+import "./style/menuitem-inline.scss";
 import SubMenuItem from "./subMenuItem";
+import InlineSubMenuItem from "./inlineSubMenuItem";
 const labelStyle = (
     key: string,
     hoverKey: string | null,
@@ -64,6 +66,11 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
             if (selectKey === key) str += " menuItemContainer-vertical-select"
             return str
         }
+        else if (mode === "inline") {
+            let str = "menuItemContainer-inline";
+            return str
+        };
+
     })()
     let style = mode === "vertical" && selectKey === key ? { backgroundColor: "#bcd8f2" } : {}
     return (
@@ -90,7 +97,8 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
                                     key={item.key}
                                     show={isHover}
                                     itemIndex={index}
-                                />)}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>}

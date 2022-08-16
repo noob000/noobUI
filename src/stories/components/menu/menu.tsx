@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import ActiveKeyContext from "./hooks/ActiveKeyContext";
+import InlineMenuItem from "./inlineMenuItem";
 import { testItem } from "./menu.test";
 import MenuItem from "./menuItem";
 import "./style/menu.scss"
@@ -34,7 +35,7 @@ function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string,
 }
 
 
-const Menu: FC<MenuProps> = ({ items = testItem, mode = 'vertical', selectedKey = null }) => {
+const Menu: FC<MenuProps> = ({ items = testItem, mode = 'inline', selectedKey = null }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>(new Map());
     const [selectKey, setSelectKey] = useState<string | null>(null);
     const [hoverKey, setHoverKey] = useState<string | null>(null);
@@ -68,10 +69,16 @@ const Menu: FC<MenuProps> = ({ items = testItem, mode = 'vertical', selectedKey 
                 setHoverKey: (key: string | null) => { setHoverKey(key) },
                 setSelectKey: (key: string) => { setSelectKey(key) }
             }}>
-                {items.map((item,index) => <MenuItem
-                    item={item}
-                    key={item.key}
-                    index={index} />)}
+                {items.map((item, index) => mode !== "inline" ?
+                    <MenuItem
+                        item={item}
+                        key={item.key}
+                        index={index} />
+                    : <InlineMenuItem
+                        item={item}
+                        key={item.key}
+                        index={index} />
+                )}
             </ActiveKeyContext.Provider>
         </div>
     )
