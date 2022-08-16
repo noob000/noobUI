@@ -1,7 +1,7 @@
 import React, { FC, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { ActiveKeyContext, MenuItemProps } from "./menu";
-import { styleObj as calStyleObj } from "./menuItem";
+import { labelStyle } from "./menuItem";
 type SubMenuItemProps = {
     item: MenuItemProps,
     container: HTMLDivElement | null,
@@ -14,7 +14,7 @@ const SubMenuItem: FC<SubMenuItemProps>
         const { label, key, children, onClick } = item
         const [isHover, setIsHover] = useState<boolean>(false);
         const [isSubMenuHover, setIsSubMenuHover] = useState<boolean>(false);
-        const { hoverKey, selectKey, keyMap, setHoverKey, setSelectKey } = useContext(ActiveKeyContext);
+        const { hoverKey, selectKey, keyMap, setHoverKey, setSelectKey, mode } = useContext(ActiveKeyContext);
 
         const handleMouseEnter = () => {
             setHoverKey(key);
@@ -25,9 +25,9 @@ const SubMenuItem: FC<SubMenuItemProps>
                 setIsHover(false);
             }, 0)
         }
-        const isChildrenRender = container && (children && children.length > 0) && (isHover || isSubMenuHover)
+        const isChildrenRender = container && (children && children.length > 0) && (isHover || isSubMenuHover) as boolean
         //子列表渲染判断当且仅当container容器非空，children非空，子列表hover或当前列表正处于hover
-        const className = children ? "subMenuItem hasChildren" : "subMenuItem noChildren";
+        const className = children ? `subMenuItem-${mode} hasChildren-${mode}` : `subMenuItem-${mode} noChildren-${mode}`;
         const l = hoverKey ? (keyMap.get(key) as string[]).length : 0;
         const top = l * 3 + itemIndex * 40;
 
@@ -36,7 +36,7 @@ const SubMenuItem: FC<SubMenuItemProps>
             onClick && onClick.bind(null, { selectKey, event })
         }
 
-        let styleObj = calStyleObj(key, hoverKey, selectKey, keyMap);
+        let styleObj = labelStyle(key, hoverKey, selectKey, keyMap);
         if (key === selectKey) styleObj.backgroundColor = "#bcd8f2";
 
         return (
@@ -53,13 +53,13 @@ const SubMenuItem: FC<SubMenuItemProps>
                     </div>
                     {
                         isChildrenRender && createPortal(
-                            <div className="subMenuContainer"
+                            <div className={`subMenuContainer-${mode}`}
                                 onMouseEnter={() => { setIsSubMenuHover(true) }}
                                 onMouseLeave={() => { setIsSubMenuHover(false) }}
                                 style={{ top: `${top}px` }}>
-                                <div className="beforeElement">
-                                    <div className="flexContainer">
-                                        <div className="shadowContainer">
+                                <div className={`beforeElement-${mode}`}>
+                                    <div className={`flexContainer-${mode}`}>
+                                        <div className={`shadowContainer-${mode}`}>
                                             {children.map((item, index) =>
                                                 <SubMenuItem
                                                     item={item}

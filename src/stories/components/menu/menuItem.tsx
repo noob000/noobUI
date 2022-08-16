@@ -1,9 +1,10 @@
 import { CSSProperties, FC, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { MenuItemProps } from "./menu";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
-import "./style/menuitem.scss";
+import "./style/menuitem-horizontal.scss";
+import "./style/menuitem-vertical.scss";
 import SubMenuItem from "./subMenuItem";
-const styleObj = (
+const labelStyle = (
     key: string,
     hoverKey: string | null,
     selectkey: string | null,
@@ -22,11 +23,11 @@ const styleObj = (
     }
 }
 
-const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
+const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) => {
     const { label, key, children, onClick } = item
     const [isHover, setIsHover] = useState<boolean>(false);
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
-    const { hoverKey, keyMap, setHoverKey, selectKey, setSelectKey } = useContext(ActiveKeyContext);
+    const { hoverKey, keyMap, setHoverKey, selectKey, setSelectKey, mode } = useContext(ActiveKeyContext);
     const containerRef = useCallback((node: any) => {
         if (node) setContainer(node)
     }, [item])
@@ -42,28 +43,46 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
         }, 0)
     }
 
-    const left = menuRef.current ? menuRef.current?.offsetLeft : 0;
+    const containerStyle = (() => {
+        let style: CSSProperties = {}
+        let left: number = 0;
+        if (mode === "horizontal") left = menuRef.current ? menuRef.current?.offsetLeft : 0;
+        else if (mode === "vertical") left = menuRef.current ? menuRef.current?.offsetWidth : 0;
+        style.left = `${left}px`
+        if (mode === "vertical") style.top = `${index * 30}px`
+        return style;
+    })()
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (!children || children.length === 0) setSelectKey(key)
         onClick && onClick.bind(null, { selectKey, event })
     }
+    const containerClass = (() => {
+        if (mode === "horizontal") return "menuItemContainer-horizontal";
+        else if (mode === "vertical") {
+            let str = "menuItemContainer-vertical"
+            if (children && children.length > 0) str += " hasChildren-vertical"
+            if (selectKey === key) str += " menuItemContainer-vertical-select"
+            return str
+        }
+    })()
+    let style = mode === "vertical" && selectKey === key ? { backgroundColor: "#bcd8f2" } : {}
     return (
-        <div className="menuItemContainer"
+        <div className={containerClass}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             ref={menuRef}
             onClick={handleClick}>
             <span
                 className="title"
-                style={styleObj(key, hoverKey, selectKey, keyMap)}
+                style={labelStyle(key, hoverKey, selectKey, keyMap)}
             >{label}</span>
             {children &&
                 <div
-                    className="opacityContainer"
+                    className={`opacityContainer-${mode}`}
                     ref={containerRef}
-                    style={{ left: `${left}px` }}>
-                    <div className="beforeElement">
-                        <div className='shadowContainer'>
+                    style={containerStyle}>
+                    <div className={`beforeElement-${mode}`}>
+                        <div className={`shadowContainer-${mode}`}>
                             {children.map((item, index) =>
                                 <SubMenuItem
                                     item={item}
@@ -79,4 +98,4 @@ const MenuItem: FC<{ item: MenuItemProps }> = ({ item }) => {
     )
 }
 export default MenuItem
-export { styleObj }
+export { labelStyle }

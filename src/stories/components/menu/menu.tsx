@@ -5,7 +5,7 @@ import MenuItem from "./menuItem";
 import "./style/menu.scss"
 type MenuProps = {
     items?: MenuItemProps[];
-    mode?: "vertical" | "horizontal";
+    mode?: "vertical" | "horizontal" | "inline";
     selectedKey?: string | null;
 };
 type clickFnProps = {
@@ -34,7 +34,7 @@ function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string,
 }
 
 
-const Menu: FC<MenuProps> = ({ items = testItem, selectedKey = null }) => {
+const Menu: FC<MenuProps> = ({ items = testItem, mode = 'vertical', selectedKey = null }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>(new Map());
     const [selectKey, setSelectKey] = useState<string | null>(null);
     const [hoverKey, setHoverKey] = useState<string | null>(null);
@@ -57,22 +57,21 @@ const Menu: FC<MenuProps> = ({ items = testItem, selectedKey = null }) => {
             if (!temp) throw new Error("wrong selectedKey props")
         }
     }, [keyMap, selectedKey])
-    useEffect(() => {
-        console.log(selectKey)
-    }, [selectKey])
     return (
 
-        <div className='menuContainer'>
+        <div className={`menuContainer-${mode}`}>
             <ActiveKeyContext.Provider value={{
+                mode,
                 selectKey,
                 hoverKey: hoverKey,
                 keyMap: keyMap,
                 setHoverKey: (key: string | null) => { setHoverKey(key) },
                 setSelectKey: (key: string) => { setSelectKey(key) }
             }}>
-                {items.map((item) => <MenuItem
+                {items.map((item,index) => <MenuItem
                     item={item}
-                    key={item.key} />)}
+                    key={item.key}
+                    index={index} />)}
             </ActiveKeyContext.Provider>
         </div>
     )
