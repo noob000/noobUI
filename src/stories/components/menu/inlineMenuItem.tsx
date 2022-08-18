@@ -7,20 +7,17 @@ import classNames from "classnames";
 import ExpandKeysContext from "./hooks/expandKeysContext";
 const labelStyle = (
     key: string,
-    hoverKey: string | null,
     selectkey: string | null,
     keyMap: Map<string, string[]>
 ): CSSProperties => {
-    let temp = false;
-    if (hoverKey !== null) {
-        const arr = keyMap.get(hoverKey as string) as string[];
-        temp = arr.includes(key);
-    }
-    if (!selectkey) return temp ? { color: "#1890ff" } : {}
+    if (!selectkey) return {}
     else {
+        let result: CSSProperties = {};
+        if (key === selectkey) result.backgroundColor = "#bcd8f2";
         const keyArr = keyMap.get(selectkey) as string[];
-        temp = temp || keyArr.includes(key);
-        return temp ? { color: "#1890ff" } : {}
+        let temp = keyArr.includes(key);
+        if (temp) result.color = "#1890ff"
+        return result
     }
 }
 
@@ -30,8 +27,7 @@ const InlineMenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, inde
     const [rotateClass, setRotateClass] = useState<string>("");
     const [expandKeys, setExpandKeys] = useState<string[]>([]);
     const { keyMap, selectKey, setSelectKey, childRelationMap, amountMap } = useContext(ActiveKeyContext);
-
-    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const handleClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (!children || children.length === 0) setSelectKey(key)
         onClick && onClick.bind(null, { selectKey, event });
         setSubMenuShow(!subMenuShow);
@@ -39,27 +35,42 @@ const InlineMenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, inde
             setRotateClass(subMenuShow ? "rotate" : "rotate-reverse");
             setExpandKeys(prev => !subMenuShow ? [...prev, key] : prev.filter(v => v !== key))
         }
-    }
+    }, [])
 
-    const height = useMemo(() => {
-        let count = 0;
-        expandKeys.forEach((item) => {
-            count += amountMap.get(item) as number
-        })
-        return `${count * 48}px`
-    }, [expandKeys])
+    const height = (() => {
+        if (!children || children.length === 0) return "0px"
+        else if (subMenuShow) {
+            let set = new Set(expandKeys)
+            let childKeys = new Set(children?.map(v => v.key));
+            let count = childKeys.size;
+            const childrenList = childRelationMap.get(key);
+            let temp = false;
+            for (let i of childKeys) {
+                if (set.has(i)) {
+                    temp = true;
+                    break;
+                }
+            }
+            if (temp)
+                expandKeys.forEach(v => {
+                    if (childrenList?.has(v)) count += amountMap.get(v) as number
+                })
+            return `${count * 50}px`
+        }
+        else return "0px"
+    })()
     const hasChildren = children && children.length > 0
     return (
         <div className="menuItemContainer-inline" >
             <div className="flexContainer"
-                onClick={handleClick}>
+                onClick={handleClick}
+                style={labelStyle(key, selectKey, keyMap)}>
                 <div className="label">{label}</div>
-
                 {hasChildren &&
                     <div className={classNames({
                         "arrow": true,
                         [rotateClass]: hasChildren
-                    })} style={{paddingRight:"15px"}}>^</div>}
+                    })} style={{ paddingRight: "15px" }}>^</div>}
             </div>
 
             <ExpandKeysContext.Provider value={{
