@@ -59,7 +59,7 @@ const InlineMenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, inde
                     <div className={classNames({
                         "arrow": true,
                         [rotateClass]: hasChildren
-                    })}>^</div>}
+                    })} style={{paddingRight:"15px"}}>^</div>}
             </div>
 
             <ExpandKeysContext.Provider value={{
