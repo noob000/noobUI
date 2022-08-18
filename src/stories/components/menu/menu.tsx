@@ -1,9 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useMemo } from "react";
 import ActiveKeyContext from "./hooks/ActiveKeyContext";
 import InlineMenuItem from "./inlineMenuItem";
 import { testItem } from "./menu.test";
 import MenuItem from "./menuItem";
 import "./style/menu.scss"
+import { getChildRelationMap, handleMenuItem } from "./util";
 type MenuProps = {
     items?: MenuItemProps[];
     mode?: "vertical" | "horizontal" | "inline";
@@ -21,17 +22,6 @@ type MenuItemProps = {
     key: string;
     children?: MenuItemProps[];
     onClick?: clickFn
-}
-
-function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string, string[]>) {
-    const { key, children } = item
-    let next = [...lastArr, key];
-    map.set(key, next);
-    if (children) {
-        children.forEach((item) => {
-            handleMenuItem(item, next, map)
-        })
-    }
 }
 
 
@@ -58,8 +48,8 @@ const Menu: FC<MenuProps> = ({ items = testItem, mode = 'inline', selectedKey = 
             if (!temp) throw new Error("wrong selectedKey props")
         }
     }, [keyMap, selectedKey])
+    const [childRelationMap, amountMap] = useMemo(() => getChildRelationMap(items), [items])
     return (
-
         <div className={`menuContainer-${mode}`}>
             <ActiveKeyContext.Provider value={{
                 mode,
@@ -67,7 +57,9 @@ const Menu: FC<MenuProps> = ({ items = testItem, mode = 'inline', selectedKey = 
                 hoverKey: hoverKey,
                 keyMap: keyMap,
                 setHoverKey: (key: string | null) => { setHoverKey(key) },
-                setSelectKey: (key: string) => { setSelectKey(key) }
+                setSelectKey: (key: string) => { setSelectKey(key) },
+                childRelationMap: childRelationMap,
+                amountMap
             }}>
                 {items.map((item, index) => mode !== "inline" ?
                     <MenuItem

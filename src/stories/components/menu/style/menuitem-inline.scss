@@ -34,6 +34,9 @@
 .opacityContainer-inline {
     width: 100%;
     background-color: whitesmoke;
+    overflow: hidden;
+    transition: 0.5s;
+    max-width: 100%;
 }
 
 .flexContainer {
@@ -79,4 +82,10 @@
     100% {
         rotate: (180deg)
     }
+}
+
+.subMenuContainer-inline {
+    overflow: hidden;
+    transition: 0.5s;
+    transform-origin: top;
 }
