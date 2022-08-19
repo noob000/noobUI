@@ -5,7 +5,6 @@ import "./style/menuitem-horizontal.scss";
 import "./style/menuitem-vertical.scss";
 import "./style/menuitem-inline.scss";
 import SubMenuItem from "./subMenuItem";
-import InlineSubMenuItem from "./inlineSubMenuItem";
 const labelStyle = (
     key: string,
     hoverKey: string | null,
@@ -72,7 +71,6 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
         };
 
     })()
-    let style = mode === "vertical" && selectKey === key ? { backgroundColor: "#bcd8f2" } : {}
     return (
         <div className={containerClass}
             onMouseEnter={handleMouseEnter}
