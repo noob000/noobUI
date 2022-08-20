@@ -1,41 +1,22 @@
 import { MenuItemProps } from "./menu";
 
-function getChildRelationMap(items: MenuItemProps[]): [Map<string, Set<string>>, Map<string, number>] {
-    let relationMap = new Map(), amountMap = new Map();
-    const recursionFn = (item: MenuItemProps): string[] => {
-        let result: string[] = [];
-        const { key, children } = item;
-        result.push(key)
-        amountMap.set(key, (children as MenuItemProps[]).length);
-        children?.forEach((item) => {
-            if (item.children && item.children.length > 0) {
-                let temp = recursionFn(item);
-                result = [...result, ...temp];
-            }
-        })
-        relationMap.set(key, new Set(result))
-        return result;
+function getChildKeysMap(items: MenuItemProps[]):Map<string, string[]>{
+    let childrenKeysMap = new Map()
+    const recursionFn = (item: MenuItemProps) => {
+        const { children, key } = item;
+        childrenKeysMap.set(key, children ? children?.map(v => v.key) : []);
+        if (children && children.length > 0) {
+            children.forEach((item) => recursionFn(item))
+        }
     }
     for (let i = 0, l = items.length; i < l; i++) {
         const { children, key } = items[i];
+        childrenKeysMap.set(key, items[i].children ? items[i].children?.map(v => v.key) : [])
         if (children && children.length > 0) {
-            amountMap.set(key, children.length);
-            let childrenSet = new Set();
-            children.forEach((item) => {
-                childrenSet.add(item.key);
-                if (item.children && item.children.length > 0) {
-                    const temp = recursionFn(item);
-                    temp.forEach((v) => childrenSet.add(v));
-                }
-            })
-            relationMap.set(key, childrenSet);
-        }
-        else {
-            amountMap.set(key, 0);
-            relationMap.set(key, new Set())
+            children.forEach((item) => recursionFn(item))
         }
     }
-    return [relationMap, amountMap]
+    return childrenKeysMap
 }
 function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string, string[]>) {
     const { key, children } = item
@@ -47,4 +28,18 @@ function handleMenuItem(item: MenuItemProps, lastArr: string[], map: Map<string,
         })
     }
 }
-export {getChildRelationMap,handleMenuItem}
+function getHeight(key: string, expandKeys: Set<string>, itemMap: Map<string, string[]>): number {
+    let count = 0;
+    let childrenKeys = (itemMap.get(key) as string[]);
+    if (expandKeys.has(key)) {
+        count += childrenKeys.length;
+        childrenKeys?.forEach(v => {
+            if (expandKeys.has(v)) {
+                count += getHeight(v, expandKeys, itemMap);
+            }
+        })
+        return count;
+    }
+    else return 0
+}
+export { getChildKeysMap, handleMenuItem, getHeight }

@@ -4,7 +4,7 @@ import InlineMenuItem from "./inlineMenuItem";
 import { testItem } from "./menu.test";
 import MenuItem from "./menuItem";
 import "./style/menu.scss"
-import { getChildRelationMap, handleMenuItem } from "./util";
+import { getChildKeysMap, handleMenuItem } from "./util";
 type MenuProps = {
     items?: MenuItemProps[];
     mode?: "vertical" | "horizontal" | "inline";
@@ -48,7 +48,7 @@ const Menu: FC<MenuProps> = ({ items = testItem, mode = 'horizontal', selectedKe
             if (!temp) throw new Error("wrong selectedKey props")
         }
     }, [keyMap, selectedKey])
-    const [childRelationMap, amountMap] = useMemo(() => getChildRelationMap(items), [items])
+    const childKeysMap = useMemo(() => getChildKeysMap(items), [items])
     return (
         <div className={`menuContainer-${mode}`}>
             <ActiveKeyContext.Provider value={{
@@ -58,8 +58,7 @@ const Menu: FC<MenuProps> = ({ items = testItem, mode = 'horizontal', selectedKe
                 keyMap: keyMap,
                 setHoverKey: (key: string | null) => { setHoverKey(key) },
                 setSelectKey: (key: string) => { setSelectKey(key) },
-                childRelationMap: childRelationMap,
-                amountMap
+                childKeysMap: childKeysMap,
             }}>
                 {items.map((item, index) => mode !== "inline" ?
                     <MenuItem

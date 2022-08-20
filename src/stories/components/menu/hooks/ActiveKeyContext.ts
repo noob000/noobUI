@@ -1,4 +1,5 @@
 import { createContext } from "react"
+import { MenuItemProps } from "../menu"
 
 type ActiveKeyProps = {
     mode: "horizontal" | "vertical" | "inline"
@@ -7,8 +8,7 @@ type ActiveKeyProps = {
     keyMap: Map<string, string[]>,
     setSelectKey: (key: string) => void,
     setHoverKey: (key: string | null) => void,
-    childRelationMap:Map<string,Set<string>>,
-    amountMap:Map<string,number>
+    childKeysMap:Map<string,string[]>,
 }
 const ActiveKeyContext = createContext<ActiveKeyProps>({
     mode: "horizontal",
@@ -17,7 +17,6 @@ const ActiveKeyContext = createContext<ActiveKeyProps>({
     keyMap: new Map(),
     setSelectKey: () => { },
     setHoverKey: () => { },
-    childRelationMap:new Map(),
-    amountMap:new Map()
+    childKeysMap:new Map(),
 })
 export default ActiveKeyContext

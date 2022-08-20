@@ -1,10 +1,11 @@
-import { CSSProperties, FC, useCallback, useContext, useState, useMemo, } from "react";
+import { CSSProperties, FC, useContext, useState } from "react";
 import { MenuItemProps } from "./menu";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem-inline.scss";
 import InlineSubMenuItem from "./inlineSubMenuItem";
 import classNames from "classnames";
 import ExpandKeysContext from "./hooks/expandKeysContext";
+import { getHeight } from "./util";
 const labelStyle = (
     key: string,
     selectkey: string | null,
@@ -26,8 +27,8 @@ const InlineMenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, inde
     const [subMenuShow, setSubMenuShow] = useState<boolean>(false);
     const [rotateClass, setRotateClass] = useState<string>("");
     const [expandKeys, setExpandKeys] = useState<string[]>([]);
-    const { keyMap, selectKey, setSelectKey, childRelationMap, amountMap } = useContext(ActiveKeyContext);
-    const handleClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const { keyMap, selectKey, setSelectKey, childKeysMap } = useContext(ActiveKeyContext);
+    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (!children || children.length === 0) setSelectKey(key)
         onClick && onClick.bind(null, { selectKey, event });
         setSubMenuShow(!subMenuShow);
@@ -35,30 +36,8 @@ const InlineMenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, inde
             setRotateClass(subMenuShow ? "rotate" : "rotate-reverse");
             setExpandKeys(prev => !subMenuShow ? [...prev, key] : prev.filter(v => v !== key))
         }
-    }, [])
-
-    const height = (() => {
-        if (!children || children.length === 0) return "0px"
-        else if (subMenuShow) {
-            let set = new Set(expandKeys)
-            let childKeys = new Set(children?.map(v => v.key));
-            let count = childKeys.size;
-            const childrenList = childRelationMap.get(key);
-            let temp = false;
-            for (let i of childKeys) {
-                if (set.has(i)) {
-                    temp = true;
-                    break;
-                }
-            }
-            if (temp)
-                expandKeys.forEach(v => {
-                    if (childrenList?.has(v)) count += amountMap.get(v) as number
-                })
-            return `${count * 50}px`
-        }
-        else return "0px"
-    })()
+    }
+    const height = `${getHeight(key, new Set(expandKeys), childKeysMap) * 50}px`;
     const hasChildren = children && children.length > 0
     return (
         <div className="menuItemContainer-inline" >

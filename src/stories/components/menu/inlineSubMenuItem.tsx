@@ -1,8 +1,9 @@
 import classNames from "classnames";
-import React, { FC, useCallback, useContext, useMemo, useState } from "react";
+import React, { FC, useContext, useState, useRef } from "react";
 import ExpandKeysContext from "./hooks/expandKeysContext";
 import { ActiveKeyContext, MenuItemProps } from "./menu";
 import { labelStyle } from "./inlineMenuItem";
+import { getHeight } from "./util";
 
 type InlineSubMenuItemProps = {
     item: MenuItemProps,
@@ -13,43 +14,26 @@ const InlineSubMenuItem: FC<InlineSubMenuItemProps> = ({ item, menuLevel = 1 }) 
     const { label, key, children, onClick } = item;
     const [subMenuShow, setSubMenuShow] = useState<boolean>(false);
     const [rotateClass, setRotateClass] = useState<string>("");
-    const { hoverKey, selectKey, keyMap, setSelectKey, childRelationMap, amountMap } = useContext(ActiveKeyContext);
+    const { hoverKey, selectKey, keyMap, setSelectKey, childKeysMap } = useContext(ActiveKeyContext);
     //子列表渲染判断当且仅当container容器非空，children非空，子列表hover或当前列表正处于hover
     const paddingLeft = menuLevel * 10;
     const { expandKeys, setExpandKeys } = useContext(ExpandKeysContext);
-    const handleClick = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const ref = useRef<any>();
+    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (!children || children.length === 0) setSelectKey(key)
         onClick && onClick.bind(null, { selectKey, event })
         setSubMenuShow(!subMenuShow);
         if (children && children.length > 0) setRotateClass(subMenuShow ? "rotate" : "rotate-reverse");
-        if (children && children.length > 0) setExpandKeys(!subMenuShow ? [...expandKeys, key] : expandKeys.filter(v => v !== key))
-    }, [])
+        if (children && children.length > 0) {
+            setExpandKeys(!subMenuShow ? [...expandKeys, key] : expandKeys.filter(v => v !== key));
+        }
+    }
 
     let styleObj = labelStyle(key, selectKey, keyMap);
-    const height = (() => {
-        if (!children || children.length === 0) return "0px"
-        else if (subMenuShow) {
-            let set = new Set(expandKeys)
-            let childKeys = new Set(children?.map(v => v.key));
-            let count = childKeys.size;
-            const childrenList = childRelationMap.get(key);
-            let temp = false;
-            for (let i of childKeys) {
-                if (set.has(i)) {
-                    temp = true;
-                    break;
-                }
-            }
-            if (temp)
-                expandKeys.forEach(v => {
-                    if (childrenList?.has(v) && !childKeys.has(v)) count += amountMap.get(v) as number
-                })
-            return `${count * 50}px`
-        }
-        else return "0px"
-    })()
+    const height = `${getHeight(key, new Set(expandKeys), childKeysMap) * 50}px`
     //用useMemo包裹后出现高度计算错误的情况
-    const hasChildren = children && children.length > 0
+    const hasChildren = children && children.length > 0;
+
     return (
         <>
             <div className="subMenuItem-inline" style={styleObj}>
