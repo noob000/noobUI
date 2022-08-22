@@ -50,7 +50,6 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
 
         else if (mode === "vertical") {
             left = menuRef.current ? menuRef.current?.offsetWidth : 0;
-            style.top = `${index * 30}px`
         }
         style.left = `${left}px`
         return style;

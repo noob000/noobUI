@@ -25,7 +25,7 @@ type MenuItemProps = {
 }
 
 
-const Menu: FC<MenuProps> = ({ items = testItem, mode = 'horizontal', selectedKey = null }) => {
+const Menu: FC<MenuProps> = ({ items = testItem, mode = 'vertical', selectedKey = null }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>(new Map());
     const [selectKey, setSelectKey] = useState<string | null>(null);
     const [hoverKey, setHoverKey] = useState<string | null>(null);
