@@ -2,10 +2,6 @@
     padding: 10px 15px 10px 15px;
     cursor: pointer;
 
-    &:hover>.opacityContainer {
-        display: flex;
-    }
-
     span {
         white-space: nowrap;
     }
@@ -25,10 +21,9 @@
 
 .opacityContainer-horizontal {
     position: absolute;
-    top: 41px;
     display: flex;
-    left: 0px;
     align-items: flex-start;
+    transform: translateY(9px);
 }
 
 

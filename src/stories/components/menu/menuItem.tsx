@@ -3,7 +3,6 @@ import { MenuItemProps } from "./menu";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem-horizontal.scss";
 import "./style/menuitem-vertical.scss";
-import "./style/menuitem-inline.scss";
 import SubMenuItem from "./subMenuItem";
 const labelStyle = (
     key: string,
@@ -48,9 +47,12 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
         let style: CSSProperties = {}
         let left: number = 0;
         if (mode === "horizontal") left = menuRef.current ? menuRef.current?.offsetLeft : 0;
-        else if (mode === "vertical") left = menuRef.current ? menuRef.current?.offsetWidth : 0;
+
+        else if (mode === "vertical") {
+            left = menuRef.current ? menuRef.current?.offsetWidth : 0;
+            style.top = `${index * 30}px`
+        }
         style.left = `${left}px`
-        if (mode === "vertical") style.top = `${index * 30}px`
         return style;
     })()
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -59,17 +61,12 @@ const MenuItem: FC<{ item: MenuItemProps, index: number }> = ({ item, index }) =
     }
     const containerClass = (() => {
         if (mode === "horizontal") return "menuItemContainer-horizontal";
-        else if (mode === "vertical") {
+        else {
             let str = "menuItemContainer-vertical"
             if (children && children.length > 0) str += " hasChildren-vertical"
             if (selectKey === key) str += " menuItemContainer-vertical-select"
             return str
         }
-        else if (mode === "inline") {
-            let str = "menuItemContainer-inline";
-            return str
-        };
-
     })()
     return (
         <div className={containerClass}
