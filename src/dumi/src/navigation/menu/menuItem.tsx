@@ -1,5 +1,5 @@
 import { CSSProperties, FC, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { MenuItemProps } from "./menu";
+import { MenuItemProps } from ".";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem-horizontal.scss";
 import "./style/menuitem-vertical.scss";

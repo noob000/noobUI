@@ -1,4 +1,4 @@
-import { iconObj } from "../icon"
+import { iconObj } from "./iconType"
 
 const successIcon: iconObj = {
     svg: {

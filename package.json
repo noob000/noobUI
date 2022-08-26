@@ -16,7 +16,10 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "build-lib": "rimraf ./lib && rollup --config rollup.config.js && node src/entry.js",
-    "test-single": "react-scripts test .src/stories/components/message/message.test.tsx"
+    "test-single": "react-scripts test .src/stories/components/carousel/carousel.test.tsx",
+    "test-one": "react-scripts test",
+    "dumi": "cross-env APP_ROOT=./src/dumi dumi dev",
+    "dumi-build": "cross-env APP_ROOT=./src/dumi dumi build"
   },
   "dependencies": {
     "classnames": "^2.3.1"
@@ -58,7 +61,7 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
-    "@noob000/noobui": "^0.2.7",
+    "@noob000/noobui": "^0.2.8",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
@@ -79,8 +82,11 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@umijs/plugin-sass": "^1.1.1",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "cross-env": "^7.0.3",
     "cz-customizable": "^6.3.0",
+    "dumi": "^1.1.47",
     "node-sass": "^7.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.1.0",

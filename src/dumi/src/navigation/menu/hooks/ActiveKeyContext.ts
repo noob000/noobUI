@@ -1,5 +1,5 @@
 import { createContext } from "react"
-import { MenuItemProps } from "../menu"
+import { MenuItemProps } from ".."
 
 type ActiveKeyProps = {
     mode: "horizontal" | "vertical" | "inline"

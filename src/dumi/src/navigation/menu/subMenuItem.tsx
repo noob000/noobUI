@@ -1,6 +1,6 @@
 import React, { FC, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { ActiveKeyContext, MenuItemProps } from "./menu";
+import { ActiveKeyContext, MenuItemProps } from ".";
 import { labelStyle } from "./menuItem";
 type SubMenuItemProps = {
     item: MenuItemProps,

@@ -1,7 +1,6 @@
 import React from 'react';
 import './style/button.scss';
-
- export interface ButtonProps {
+export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
@@ -22,12 +21,13 @@ import './style/button.scss';
    * Optional click handler
    */
   onClick?: () => void;
+ 
 }
 
 /**
  * Primary UI component for user interaction
  */
- const Button = ({
+const Button = ({
   primary = false,
   size = 'medium',
   backgroundColor,

@@ -1,4 +1,4 @@
-import { MenuItemProps } from "./menu";
+import { MenuItemProps } from ".";
 
 function getChildKeysMap(items: MenuItemProps[]):Map<string, string[]>{
     let childrenKeysMap = new Map()

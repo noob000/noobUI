@@ -1,6 +1,6 @@
 import { getChildKeysMap } from "./util";
 import { testItem } from "./menu.test";
-import { MenuItemProps } from "./menu";
+import { MenuItemProps } from ".";
 const testItem1: MenuItemProps[] = [
     { label: "item-1", key: "item-1" },
     { label: "item-2", key: "item-2", children: [] },

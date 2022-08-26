@@ -1,6 +1,6 @@
 import "./style/style.scss";
 import icon from "./icon"
-import { pathObjKey, svgObjKey } from "../icon";
+import { pathObjKey, svgObjKey } from "./iconType";
 let set: any = new Proxy({}, {
     deleteProperty: (target: any, key) => {
         delete target[key]

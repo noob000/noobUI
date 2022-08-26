@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React, { FC, useContext, useState, useRef } from "react";
 import ExpandKeysContext from "./hooks/expandKeysContext";
-import { ActiveKeyContext, MenuItemProps } from "./menu";
+import { ActiveKeyContext, MenuItemProps } from ".";
 import { labelStyle } from "./inlineMenuItem";
 import { getHeight } from "./util";
 

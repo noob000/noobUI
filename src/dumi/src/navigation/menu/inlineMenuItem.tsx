@@ -1,5 +1,5 @@
 import { CSSProperties, FC, useContext, useState } from "react";
-import { MenuItemProps } from "./menu";
+import { MenuItemProps } from ".";
 import ActiveKeyContext from "./hooks/ActiveKeyContext"
 import "./style/menuitem-inline.scss";
 import InlineSubMenuItem from "./inlineSubMenuItem";

@@ -6,8 +6,17 @@ import MenuItem from "./menuItem";
 import "./style/menu.scss"
 import { getChildKeysMap, handleMenuItem } from "./util";
 type MenuProps = {
-    items?: MenuItemProps[];
+    /**
+     * 创建菜单的依赖数组
+     */
+    items: MenuItemProps[];
+     /**
+     * menu组件的展示形式
+     */
     mode?: "vertical" | "horizontal" | "inline";
+    /**
+     * 初始选中的key值
+     */
     selectedKey?: string | null;
 };
 type clickFnProps = {
@@ -25,7 +34,7 @@ type MenuItemProps = {
 }
 
 
-const Menu: FC<MenuProps> = ({ items = testItem, mode = 'vertical', selectedKey = null }) => {
+const Menu: FC<MenuProps> = ({ items, mode = 'vertical', selectedKey = null }) => {
     const [keyMap, setKeyMap] = useState<Map<string, string[]>>(new Map());
     const [selectKey, setSelectKey] = useState<string | null>(null);
     const [hoverKey, setHoverKey] = useState<string | null>(null);
