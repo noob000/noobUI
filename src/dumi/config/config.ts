@@ -1,3 +1,4 @@
 export default {
-    outputPath:"../../docs"
+    outputPath:"../../docs",
+    publicPath:"./"
 }
