@@ -2,12 +2,12 @@
 
 ```tsx
 import React from 'react';
-import Message from "./message";
+import Message from "./index";
 export default ()=>{
     return (
         <div>
         <div>
-        <button onClick={()=>{Message.success("Success!",10000)}}>success</button>
+        <button onClick={()=>{Message.success("Success!")}}>success</button>
         </div>
         <div>
         <button onClick={()=>{Message.warn("Warn!")}}>warn</button>
@@ -28,4 +28,4 @@ export default ()=>{
 
 ```
 
-<!-- <API> -->
+<API src="./doc.tsx"></API>
