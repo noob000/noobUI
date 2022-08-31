@@ -1,2 +1,2 @@
-import Message, { MessageApi } from "./message";
+import Message, { MessageApi } from "./Message";
 export default Message

@@ -5,11 +5,24 @@ import SwitchButton from "./switchButton";
 import useCarousel from "./useCarousel";
 export type CarouselProps = {
     children: ReactElement[];
+    /**
+     * 是否自动播放
+     */
     autoplay?: boolean;
+     /**
+     * 自动播放的时间间隔
+     */
     interval?: number;
+    /**
+     * 点击按钮出现的位置，当按钮值为"left"或"right"时，上下滚动
+     */
     dotPosition?: "bottom" | "top" | "left" | "right";
+    /**
+     * 样式
+     */
     style?: CSSProperties;
 }
+
 export type CarouselRef = {
     goTo: (posIndex: number) => void;
     next: () => void;
@@ -30,7 +43,7 @@ const Carousel = React.forwardRef<CarouselRef, CarouselProps>(
             throw TypeError("interval shoud be a positive number")
         }
         const [transition, setTransition] = useState<boolean>(false)
-        const [currentIndex, lastIndex, setIndex, next,prev] = useCarousel(children.length, autoplay, interval)
+        const [currentIndex, lastIndex, setIndex, next, prev] = useCarousel(children.length, autoplay, interval)
         const containerRef = useRef<HTMLDivElement | null>(null);
         const isVertical = dotPosition === "left" || dotPosition === "right";
         useEffect(() => {

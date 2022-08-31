@@ -1,5 +1,5 @@
 import { queryByText, screen, waitFor, waitForElementToBeRemoved, } from "@testing-library/react";
-import Message from "./message";
+import Message from "./Message";
 test("message component no duration input ", async () => {
     Message.success("this is a test message")
     expect(screen.queryByText('this is a test message')).toBeVisible()
